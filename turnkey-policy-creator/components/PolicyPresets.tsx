@@ -78,7 +78,7 @@ export function PolicyPresets({ onSelect }: PolicyPresetsProps) {
                         href={preset.docUrl}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1 text-primary hover:underline"
+                        className="inline-flex items-center gap-1 text-cyan-400 dark:text-cyan-600 hover:underline font-medium"
                         onClick={(e) => e.stopPropagation()}
                       >
                         View docs <ExternalLink className="h-3 w-3" />
