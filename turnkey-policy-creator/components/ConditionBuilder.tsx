@@ -4,7 +4,7 @@ import React from "react";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Filter } from "lucide-react";
+import { Filter, ExternalLink } from "lucide-react";
 import { EthereumConditions } from "@/components/chains/EthereumConditions";
 import { SolanaConditions } from "@/components/chains/SolanaConditions";
 import { TronConditions } from "@/components/chains/TronConditions";
@@ -84,13 +84,31 @@ export function ConditionBuilder({ config, onChange }: ConditionBuilderProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <Filter className="h-5 w-5" />
-        <Label className="text-lg font-semibold">Condition (When it applies)</Label>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Filter className="h-5 w-5" />
+          <Label className="text-lg font-semibold">Condition (When it applies)</Label>
+        </div>
+        <a
+          href="https://docs.turnkey.com/concepts/policies/overview#condition"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          Docs <ExternalLink className="h-3 w-3" />
+        </a>
       </div>
 
       <p className="text-sm text-muted-foreground">
-        Define the conditions under which this policy applies.
+        Define the conditions under which this policy applies.{" "}
+        <a
+          href="https://docs.turnkey.com/concepts/policies/language"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary hover:underline"
+        >
+          View policy language reference
+        </a>
       </p>
 
       <div>

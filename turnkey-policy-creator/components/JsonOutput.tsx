@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Check, Copy, Download, Code } from "lucide-react";
+import { Check, Copy, Download, Code, ExternalLink } from "lucide-react";
 import type { TurnkeyPolicy } from "@/types/policy";
 
 interface JsonOutputProps {
@@ -105,15 +105,32 @@ export function JsonOutput({ policy }: JsonOutputProps) {
           <p className="text-sm font-medium mb-2">Using this policy:</p>
           <p className="text-xs text-muted-foreground">
             Use this JSON with the Turnkey API&apos;s{" "}
-            <code className="bg-background px-1 py-0.5 rounded">
+            <a
+              href="https://docs.turnkey.com/api/resources/policies#create-policies"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
               create_policy
-            </code>{" "}
+            </a>{" "}
             or{" "}
-            <code className="bg-background px-1 py-0.5 rounded">
+            <a
+              href="https://docs.turnkey.com/api/resources/policies#create-policies"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary hover:underline"
+            >
               create_policies
-            </code>{" "}
-            endpoints. The policy will be evaluated against activities in your
-            organization.
+            </a>{" "}
+            endpoints.{" "}
+            <a
+              href="https://docs.turnkey.com/concepts/policies/quickstart"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-primary hover:underline"
+            >
+              View quickstart guide <ExternalLink className="h-3 w-3" />
+            </a>
           </p>
         </div>
       </CardContent>

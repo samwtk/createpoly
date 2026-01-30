@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
-import { Plus, Trash2, Users } from "lucide-react";
+import { Plus, Trash2, Users, ExternalLink } from "lucide-react";
 import type { ConsensusConfig, UserCondition } from "@/types/policy";
 
 interface ConsensusBuilderProps {
@@ -63,13 +63,31 @@ export function ConsensusBuilder({ config, onChange }: ConsensusBuilderProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center gap-2">
-        <Users className="h-5 w-5" />
-        <Label className="text-lg font-semibold">Consensus (Who can act)</Label>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Users className="h-5 w-5" />
+          <Label className="text-lg font-semibold">Consensus (Who can act)</Label>
+        </div>
+        <a
+          href="https://docs.turnkey.com/concepts/policies/overview#consensus"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          Docs <ExternalLink className="h-3 w-3" />
+        </a>
       </div>
 
       <p className="text-sm text-muted-foreground">
-        Define which users are allowed to perform actions under this policy.
+        Define which users are allowed to perform actions under this policy.{" "}
+        <a
+          href="https://docs.turnkey.com/concepts/policies/overview#consensus"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary hover:underline"
+        >
+          Learn about consensus
+        </a>
       </p>
 
       <div className="flex flex-col sm:flex-row gap-4">

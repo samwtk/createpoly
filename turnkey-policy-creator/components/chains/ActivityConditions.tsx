@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, ExternalLink } from "lucide-react";
 import type { ActivityCondition } from "@/types/policy";
 
 interface ActivityConditionsProps {
@@ -59,8 +59,18 @@ export function ActivityConditions({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <Label className="text-base font-semibold">Activity Conditions</Label>
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <div className="flex items-center gap-2">
+          <Label className="text-base font-semibold">Activity Conditions</Label>
+          <a
+            href="https://docs.turnkey.com/concepts/policies/examples"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+          >
+            Examples <ExternalLink className="h-3 w-3" />
+          </a>
+        </div>
         <Button type="button" variant="outline" size="sm" onClick={addCondition}>
           <Plus className="h-4 w-4 mr-1" />
           Add Condition
@@ -69,7 +79,15 @@ export function ActivityConditions({
 
       <p className="text-sm text-muted-foreground">
         Activity-based conditions control permissions based on the type of action
-        being performed, rather than transaction details.
+        being performed, rather than transaction details.{" "}
+        <a
+          href="https://docs.turnkey.com/api/activity-types"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary hover:underline"
+        >
+          View all activity types
+        </a>
       </p>
 
       {conditions.length === 0 && (

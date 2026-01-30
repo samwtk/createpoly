@@ -7,6 +7,7 @@ interface TooltipProps {
   children: React.ReactNode;
   className?: string;
   delayMs?: number;
+  side?: "top" | "bottom" | "left" | "right";
 }
 
 export function Tooltip({
@@ -14,9 +15,10 @@ export function Tooltip({
   children,
   className = "",
   delayMs = 200,
+  side = "top",
 }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
-  const [position, setPosition] = useState<"top" | "bottom">("top");
+  const [position, setPosition] = useState<"top" | "bottom">(side === "bottom" ? "bottom" : "top");
   const showTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const hideTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const triggerRef = useRef<HTMLDivElement>(null);
@@ -42,11 +44,18 @@ export function Tooltip({
     showTimeoutRef.current = setTimeout(() => {
       if (triggerRef.current) {
         const rect = triggerRef.current.getBoundingClientRect();
-        setPosition(rect.top < 120 ? "bottom" : "top");
+        // Auto-adjust if not enough space
+        if (side === "top" && rect.top < 120) {
+          setPosition("bottom");
+        } else if (side === "bottom" && window.innerHeight - rect.bottom < 120) {
+          setPosition("top");
+        } else {
+          setPosition(side === "bottom" ? "bottom" : "top");
+        }
       }
       setIsVisible(true);
     }, delayMs);
-  }, [delayMs, clearTimeouts]);
+  }, [delayMs, clearTimeouts, side]);
 
   const hideTooltip = useCallback(() => {
     clearTimeouts();
@@ -68,27 +77,33 @@ export function Tooltip({
       className={`relative inline-flex ${className}`}
       onMouseEnter={showTooltip}
       onMouseLeave={hideTooltip}
+      onFocus={showTooltip}
+      onBlur={hideTooltip}
     >
       {children}
       {isVisible && (
         <div
           ref={tooltipRef}
-          className={`absolute z-[100] px-3 py-2 text-sm bg-foreground text-background border border-border rounded-md shadow-xl max-w-xs whitespace-normal ${
-            position === "top"
-              ? "bottom-full left-1/2 -translate-x-1/2 mb-2"
-              : "top-full left-1/2 -translate-x-1/2 mt-2"
-          }`}
+          className={`absolute z-[100] px-3 py-2.5 text-sm leading-relaxed rounded-lg shadow-2xl max-w-sm whitespace-normal animate-in fade-in-0 zoom-in-95 duration-150
+            bg-gray-900 text-gray-100 dark:bg-gray-100 dark:text-gray-900
+            ${
+              position === "top"
+                ? "bottom-full left-1/2 -translate-x-1/2 mb-2"
+                : "top-full left-1/2 -translate-x-1/2 mt-2"
+            }`}
           role="tooltip"
           onMouseEnter={cancelHide}
           onMouseLeave={hideTooltip}
         >
           {content}
           <div
-            className={`absolute left-1/2 -translate-x-1/2 w-2 h-2 bg-foreground rotate-45 ${
-              position === "top"
-                ? "top-full -mt-1"
-                : "bottom-full -mb-1"
-            }`}
+            className={`absolute left-1/2 -translate-x-1/2 w-2.5 h-2.5 rotate-45
+              bg-gray-900 dark:bg-gray-100
+              ${
+                position === "top"
+                  ? "top-full -mt-1.5"
+                  : "bottom-full -mb-1.5"
+              }`}
           />
         </div>
       )}

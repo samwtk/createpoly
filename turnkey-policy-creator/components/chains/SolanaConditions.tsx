@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, ExternalLink } from "lucide-react";
 import type { SolanaConditionConfig, SolanaTransferCondition } from "@/types/policy";
 
 interface SolanaConditionsProps {
@@ -110,10 +110,22 @@ export function SolanaConditions({ config, onChange }: SolanaConditionsProps) {
 
   return (
     <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <Label className="text-base font-semibold">Solana Conditions</Label>
+        <a
+          href="https://docs.turnkey.com/concepts/policies/examples#solana-policies"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          Examples <ExternalLink className="h-3 w-3" />
+        </a>
+      </div>
+
       {/* Instruction Count */}
       <div className="space-y-3">
         <div className="flex items-center justify-between">
-          <Label className="text-base font-semibold">Instruction Count</Label>
+          <Label className="text-sm font-medium">Instruction Count</Label>
           {config.instructionCount ? (
             <Button
               type="button"
