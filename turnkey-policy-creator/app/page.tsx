@@ -35,6 +35,26 @@ export default function Home() {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-6 sm:py-8 flex-1">
+        {/* Policy Overview Diagram */}
+        <a
+          href="https://docs.turnkey.com/concepts/policies/overview#consensus"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block mb-6 rounded-lg overflow-hidden border bg-card/50 hover:bg-card/70 transition-colors group"
+        >
+          <img
+            src="/createpoly/policy_overview.avif"
+            alt="Policy overview diagram showing how consensus and conditions work together"
+            className="w-full h-auto"
+          />
+          <div className="px-4 py-3 flex items-center justify-between">
+            <span className="text-sm text-muted-foreground group-hover:text-foreground transition-colors">
+              Learn more about policy consensus
+            </span>
+            <ExternalLink className="h-4 w-4 text-muted-foreground group-hover:text-foreground transition-colors" />
+          </div>
+        </a>
+
         <PolicyBuilder />
       </div>
 
