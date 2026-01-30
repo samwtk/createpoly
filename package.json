@@ -1,0 +1,11 @@
+{
+  "name": "policy-creation",
+  "private": true,
+  "scripts": {
+    "bootstrap": "cd turnkey-policy-creator && npm install && npm run dev",
+    "dev": "cd turnkey-policy-creator && npm run dev",
+    "build": "cd turnkey-policy-creator && npm run build",
+    "start": "cd turnkey-policy-creator && npm run start",
+    "install:app": "cd turnkey-policy-creator && npm install"
+  }
+}
