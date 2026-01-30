@@ -44,7 +44,6 @@ export function PolicyBuilder() {
     buildPolicy(defaultConfig)
   );
 
-  // Update policy whenever config changes
   useEffect(() => {
     setPolicy(buildPolicy(config));
   }, [config]);
@@ -77,113 +76,115 @@ export function PolicyBuilder() {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {/* Left Column - Builder */}
-      <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <FileText className="h-5 w-5" />
-              Policy Builder
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {/* Policy Name */}
-            <div className="space-y-2">
-              <Label htmlFor="policyName">Policy Name</Label>
-              <Input
-                id="policyName"
-                placeholder="Enter a descriptive name for this policy"
-                value={config.policyName}
-                onChange={(e) => updateConfig("policyName", e.target.value)}
-              />
-            </div>
+    <div className="space-y-6">
+      {/* Presets - Full Width at Top */}
+      <PolicyPresets onSelect={handlePresetSelect} />
 
-            {/* Effect Toggle */}
-            <div className="space-y-2">
-              <Label>Effect</Label>
-              <div className="flex gap-2">
-                <Button
-                  type="button"
-                  variant={config.effect === "EFFECT_ALLOW" ? "default" : "outline"}
-                  className={
-                    config.effect === "EFFECT_ALLOW"
-                      ? "bg-green-600 hover:bg-green-700"
-                      : ""
-                  }
-                  onClick={() => handleEffectToggle("EFFECT_ALLOW")}
-                >
-                  <Shield className="h-4 w-4 mr-2" />
-                  ALLOW
-                </Button>
-                <Button
-                  type="button"
-                  variant={config.effect === "EFFECT_DENY" ? "default" : "outline"}
-                  className={
-                    config.effect === "EFFECT_DENY"
-                      ? "bg-red-600 hover:bg-red-700"
-                      : ""
-                  }
-                  onClick={() => handleEffectToggle("EFFECT_DENY")}
-                >
-                  <ShieldOff className="h-4 w-4 mr-2" />
-                  DENY
+      {/* Main Builder Area - Two Column on Desktop */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Left Column - Builder Form */}
+        <div className="space-y-6 order-2 lg:order-1">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <FileText className="h-5 w-5" />
+                Policy Builder
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Policy Name */}
+              <div className="space-y-2">
+                <Label htmlFor="policyName">Policy Name</Label>
+                <Input
+                  id="policyName"
+                  placeholder="Enter a descriptive name for this policy"
+                  value={config.policyName}
+                  onChange={(e) => updateConfig("policyName", e.target.value)}
+                />
+              </div>
+
+              {/* Effect Toggle */}
+              <div className="space-y-2">
+                <Label>Effect</Label>
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    type="button"
+                    variant={config.effect === "EFFECT_ALLOW" ? "default" : "outline"}
+                    className={
+                      config.effect === "EFFECT_ALLOW"
+                        ? "bg-green-600 hover:bg-green-700 flex-1 sm:flex-none"
+                        : "flex-1 sm:flex-none"
+                    }
+                    onClick={() => handleEffectToggle("EFFECT_ALLOW")}
+                  >
+                    <Shield className="h-4 w-4 mr-2" />
+                    ALLOW
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={config.effect === "EFFECT_DENY" ? "default" : "outline"}
+                    className={
+                      config.effect === "EFFECT_DENY"
+                        ? "bg-red-600 hover:bg-red-700 flex-1 sm:flex-none"
+                        : "flex-1 sm:flex-none"
+                    }
+                    onClick={() => handleEffectToggle("EFFECT_DENY")}
+                  >
+                    <ShieldOff className="h-4 w-4 mr-2" />
+                    DENY
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground">
+                  {config.effect === "EFFECT_ALLOW"
+                    ? "This policy will ALLOW matching actions."
+                    : "This policy will DENY matching actions. Deny always takes precedence over Allow."}
+                </p>
+              </div>
+
+              <div className="border-t" />
+
+              {/* Consensus */}
+              <ConsensusBuilder
+                config={config.consensus || defaultConsensus}
+                onChange={handleConsensusChange}
+              />
+
+              <div className="border-t" />
+
+              {/* Condition */}
+              <ConditionBuilder
+                config={config.condition || defaultCondition}
+                onChange={handleConditionChange}
+              />
+
+              <div className="border-t" />
+
+              {/* Notes */}
+              <div className="space-y-2">
+                <Label htmlFor="notes">Notes (Optional)</Label>
+                <Textarea
+                  id="notes"
+                  placeholder="Add any notes or documentation for this policy"
+                  value={config.notes || ""}
+                  onChange={(e) => updateConfig("notes", e.target.value)}
+                  rows={3}
+                />
+              </div>
+
+              {/* Reset Button */}
+              <div className="flex justify-end">
+                <Button type="button" variant="outline" onClick={handleReset}>
+                  Reset Form
                 </Button>
               </div>
-              <p className="text-xs text-muted-foreground">
-                {config.effect === "EFFECT_ALLOW"
-                  ? "This policy will ALLOW matching actions."
-                  : "This policy will DENY matching actions. Deny always takes precedence over Allow."}
-              </p>
-            </div>
+            </CardContent>
+          </Card>
+        </div>
 
-            {/* Divider */}
-            <div className="border-t" />
-
-            {/* Consensus */}
-            <ConsensusBuilder
-              config={config.consensus || defaultConsensus}
-              onChange={handleConsensusChange}
-            />
-
-            {/* Divider */}
-            <div className="border-t" />
-
-            {/* Condition */}
-            <ConditionBuilder
-              config={config.condition || defaultCondition}
-              onChange={handleConditionChange}
-            />
-
-            {/* Divider */}
-            <div className="border-t" />
-
-            {/* Notes */}
-            <div className="space-y-2">
-              <Label htmlFor="notes">Notes (Optional)</Label>
-              <Textarea
-                id="notes"
-                placeholder="Add any notes or documentation for this policy"
-                value={config.notes || ""}
-                onChange={(e) => updateConfig("notes", e.target.value)}
-                rows={3}
-              />
-            </div>
-
-            {/* Reset Button */}
-            <div className="flex justify-end">
-              <Button type="button" variant="outline" onClick={handleReset}>
-                Reset Form
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Right Column - Output & Presets */}
-      <div className="space-y-6">
-        <JsonOutput policy={policy} />
-        <PolicyPresets onSelect={handlePresetSelect} />
+        {/* Right Column - JSON Output */}
+        <div className="order-1 lg:order-2 lg:sticky lg:top-6 lg:self-start">
+          <JsonOutput policy={policy} />
+        </div>
       </div>
     </div>
   );

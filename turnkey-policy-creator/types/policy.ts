@@ -103,4 +103,5 @@ export interface PolicyPreset {
   description: string;
   category: "ethereum" | "solana" | "tron" | "general";
   config: PolicyConfig;
+  docUrl?: string;
 }
