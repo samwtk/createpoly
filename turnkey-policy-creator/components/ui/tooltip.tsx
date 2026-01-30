@@ -73,10 +73,10 @@ export function Tooltip({
       {isVisible && (
         <div
           ref={tooltipRef}
-          className={`absolute z-50 px-3 py-2 text-sm bg-popover text-popover-foreground border border-border rounded-md shadow-lg max-w-xs whitespace-normal ${
+          className={`absolute z-[100] px-3 py-2 text-sm bg-foreground text-background border border-border rounded-md shadow-xl max-w-xs whitespace-normal ${
             position === "top"
-              ? "bottom-full left-1/2 -translate-x-1/2 mb-1"
-              : "top-full left-1/2 -translate-x-1/2 mt-1"
+              ? "bottom-full left-1/2 -translate-x-1/2 mb-2"
+              : "top-full left-1/2 -translate-x-1/2 mt-2"
           }`}
           role="tooltip"
           onMouseEnter={cancelHide}
@@ -84,10 +84,10 @@ export function Tooltip({
         >
           {content}
           <div
-            className={`absolute left-1/2 -translate-x-1/2 w-2 h-2 bg-popover border-border rotate-45 ${
+            className={`absolute left-1/2 -translate-x-1/2 w-2 h-2 bg-foreground rotate-45 ${
               position === "top"
-                ? "top-full -mt-1 border-b border-r"
-                : "bottom-full -mb-1 border-t border-l"
+                ? "top-full -mt-1"
+                : "bottom-full -mb-1"
             }`}
           />
         </div>
