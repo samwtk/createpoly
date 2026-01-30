@@ -1,4 +1,5 @@
 import { PolicyBuilder } from "@/components/PolicyBuilder";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import { ExternalLink } from "lucide-react";
 
 export default function Home() {
@@ -16,15 +17,18 @@ export default function Home() {
                 Build and export policies for your Turnkey organization
               </p>
             </div>
-            <a
-              href="https://docs.turnkey.com/concepts/policies/overview"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors self-start sm:self-auto"
-            >
-              Documentation
-              <ExternalLink className="h-4 w-4" />
-            </a>
+            <div className="flex items-center gap-2 self-start sm:self-auto">
+              <a
+                href="https://docs.turnkey.com/concepts/policies/overview"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground transition-colors"
+              >
+                Documentation
+                <ExternalLink className="h-4 w-4" />
+              </a>
+              <ThemeToggle />
+            </div>
           </div>
         </div>
       </header>
