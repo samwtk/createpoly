@@ -81,7 +81,7 @@ export function TronConditions({ conditions, onChange }: TronConditionsProps) {
         <div className="flex items-center gap-2">
           <Label className="text-base font-semibold">Tron Conditions</Label>
           <a
-            href="https://docs.turnkey.com/concepts/policies/examples#tron-policies"
+            href="https://docs.turnkey.com/concepts/policies/examples/tron"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
@@ -99,7 +99,7 @@ export function TronConditions({ conditions, onChange }: TronConditionsProps) {
         <p className="text-sm text-muted-foreground">
           No conditions added. The policy will apply to all Tron transactions.{" "}
           <a
-            href="https://docs.turnkey.com/concepts/policies/examples"
+            href="https://docs.turnkey.com/concepts/policies/examples/tron"
             target="_blank"
             rel="noopener noreferrer"
             className="text-primary hover:underline"

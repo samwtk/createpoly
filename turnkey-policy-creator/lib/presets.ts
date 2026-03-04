@@ -6,7 +6,7 @@ export const policyPresets: PolicyPreset[] = [
     name: "Ethereum: Allow Single Address",
     description: "Allow a user to sign Ethereum transactions to a specific address",
     category: "ethereum",
-    docUrl: "https://docs.turnkey.com/concepts/policies/examples#ethereum-policies",
+    docUrl: "https://docs.turnkey.com/concepts/policies/examples/ethereum",
     config: {
       policyName: "Allow ETH transactions to specific address",
       effect: "EFFECT_ALLOW",
@@ -32,7 +32,7 @@ export const policyPresets: PolicyPreset[] = [
     name: "Ethereum: Value Limit",
     description: "Allow transactions up to a maximum value (in wei)",
     category: "ethereum",
-    docUrl: "https://docs.turnkey.com/concepts/policies/examples#ethereum-policies",
+    docUrl: "https://docs.turnkey.com/concepts/policies/examples/ethereum",
     config: {
       policyName: "Allow ETH transactions under value limit",
       effect: "EFFECT_ALLOW",
@@ -58,7 +58,7 @@ export const policyPresets: PolicyPreset[] = [
     name: "Ethereum: Specific Chain Only",
     description: "Restrict transactions to a specific chain (e.g., mainnet)",
     category: "ethereum",
-    docUrl: "https://docs.turnkey.com/concepts/policies/examples#ethereum-policies",
+    docUrl: "https://docs.turnkey.com/concepts/policies/examples/ethereum",
     config: {
       policyName: "Allow ETH mainnet only",
       effect: "EFFECT_ALLOW",
@@ -84,7 +84,7 @@ export const policyPresets: PolicyPreset[] = [
     name: "Solana: Single Transfer to Address",
     description: "Allow single SOL transfer to a specific address",
     category: "solana",
-    docUrl: "https://docs.turnkey.com/concepts/policies/examples#solana-policies",
+    docUrl: "https://docs.turnkey.com/concepts/policies/examples/solana",
     config: {
       policyName: "Allow single SOL transfer to address",
       effect: "EFFECT_ALLOW",
@@ -116,7 +116,7 @@ export const policyPresets: PolicyPreset[] = [
     name: "Solana: Allowlist Transfers",
     description: "Allow transfers only to allowlisted addresses",
     category: "solana",
-    docUrl: "https://docs.turnkey.com/concepts/policies/examples#solana-policies",
+    docUrl: "https://docs.turnkey.com/concepts/policies/examples/solana",
     config: {
       policyName: "Allow SOL transfers to allowlist",
       effect: "EFFECT_ALLOW",
@@ -146,7 +146,7 @@ export const policyPresets: PolicyPreset[] = [
     name: "Solana: SPL Token Transfer",
     description: "Allow SPL token transfers to a specific address",
     category: "solana",
-    docUrl: "https://docs.turnkey.com/concepts/policies/examples#solana-policies",
+    docUrl: "https://docs.turnkey.com/concepts/policies/examples/solana",
     config: {
       policyName: "Allow SPL token transfer",
       effect: "EFFECT_ALLOW",
@@ -176,7 +176,7 @@ export const policyPresets: PolicyPreset[] = [
     name: "Tron: TRX Transfer",
     description: "Allow TRX transfers to a specific address",
     category: "tron",
-    docUrl: "https://docs.turnkey.com/concepts/policies/examples#tron-policies",
+    docUrl: "https://docs.turnkey.com/concepts/policies/examples/tron",
     config: {
       policyName: "Allow TRX transfer",
       effect: "EFFECT_ALLOW",
@@ -207,7 +207,7 @@ export const policyPresets: PolicyPreset[] = [
     name: "Tron: Smart Contract Interaction",
     description: "Allow interaction with a specific smart contract",
     category: "tron",
-    docUrl: "https://docs.turnkey.com/concepts/policies/examples#tron-policies",
+    docUrl: "https://docs.turnkey.com/concepts/policies/examples/tron",
     config: {
       policyName: "Allow smart contract interaction",
       effect: "EFFECT_ALLOW",
