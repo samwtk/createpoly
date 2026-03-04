@@ -26,6 +26,7 @@ const defaultConsensus: ConsensusConfig = {
 };
 
 const defaultCondition: ConditionConfig = {
+  conditionJoin: "&&",
   chain: "ethereum",
   ethereum: [],
 };

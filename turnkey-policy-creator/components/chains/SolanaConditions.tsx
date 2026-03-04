@@ -113,7 +113,7 @@ export function SolanaConditions({ config, onChange }: SolanaConditionsProps) {
       <div className="flex items-center justify-between">
         <Label className="text-base font-semibold">Solana Conditions</Label>
         <a
-          href="https://docs.turnkey.com/concepts/policies/examples#solana-policies"
+          href="https://docs.turnkey.com/concepts/policies/examples/solana"
           target="_blank"
           rel="noopener noreferrer"
           className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"

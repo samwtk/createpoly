@@ -1,21 +1,26 @@
 "use client";
 
 import React from "react";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Filter, ExternalLink } from "lucide-react";
+import { Filter, ExternalLink, ChevronDown, ChevronRight, Plus } from "lucide-react";
 import { EthereumConditions } from "@/components/chains/EthereumConditions";
 import { SolanaConditions } from "@/components/chains/SolanaConditions";
 import { TronConditions } from "@/components/chains/TronConditions";
+import { BitcoinConditions } from "@/components/chains/BitcoinConditions";
 import { ActivityConditions } from "@/components/chains/ActivityConditions";
+import { SigningResourceConditions } from "@/components/chains/SigningResourceConditions";
 import type {
   ConditionConfig,
   ChainType,
   EthereumCondition,
   SolanaConditionConfig,
   TronCondition,
+  BitcoinConditionConfig,
   ActivityCondition,
+  SigningResourceCondition,
 } from "@/types/policy";
 
 interface ConditionBuilderProps {
@@ -27,67 +32,141 @@ const chainOptions = [
   { value: "ethereum", label: "Ethereum / EVM" },
   { value: "solana", label: "Solana" },
   { value: "tron", label: "Tron" },
-  { value: "activity", label: "Activity-based" },
-  { value: "raw", label: "Raw Expression" },
+  { value: "bitcoin", label: "Bitcoin" },
 ];
 
+const joinOptions = [
+  { value: "&&", label: "AND (&&) — all conditions must match" },
+  { value: "||", label: "OR (||) — any condition must match" },
+];
+
+interface SectionHeaderProps {
+  title: string;
+  enabled: boolean;
+  onToggle: () => void;
+  docUrl?: string;
+  docLabel?: string;
+}
+
+function SectionHeader({
+  title,
+  enabled,
+  onToggle,
+  docUrl,
+  docLabel,
+}: SectionHeaderProps) {
+  return (
+    <div className="flex items-center justify-between">
+      <button
+        type="button"
+        onClick={onToggle}
+        className="flex items-center gap-2 text-sm font-semibold hover:text-foreground transition-colors"
+      >
+        {enabled ? (
+          <ChevronDown className="h-4 w-4" />
+        ) : (
+          <ChevronRight className="h-4 w-4" />
+        )}
+        {title}
+        <span
+          className={`text-xs px-1.5 py-0.5 rounded-full ${
+            enabled
+              ? "bg-primary/20 text-primary"
+              : "bg-muted text-muted-foreground"
+          }`}
+        >
+          {enabled ? "on" : "off"}
+        </span>
+      </button>
+      {docUrl && (
+        <a
+          href={docUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          {docLabel || "Docs"} <ExternalLink className="h-3 w-3" />
+        </a>
+      )}
+    </div>
+  );
+}
+
 export function ConditionBuilder({ config, onChange }: ConditionBuilderProps) {
-  const handleChainChange = (chain: string) => {
-    if (chain === "raw") {
-      onChange({
-        ...config,
-        chain: "activity",
-        rawCondition: config.rawCondition || "",
-      });
+  const isRawMode = !!config.rawCondition;
+  const join = config.conditionJoin || "&&";
+
+  const networkEnabled = config.chain !== undefined;
+  const activityEnabled = config.activity !== undefined;
+  const signingResourceEnabled = config.signingResource !== undefined;
+
+  const toggleNetwork = () => {
+    if (networkEnabled) {
+      const { chain, ethereum, solana, tron, bitcoin, ...rest } = config;
+      void chain; void ethereum; void solana; void tron; void bitcoin;
+      onChange(rest);
     } else {
-      const newConfig: ConditionConfig = {
-        chain: chain as ChainType,
-      };
-
-      // Initialize chain-specific config
-      if (chain === "ethereum") {
-        newConfig.ethereum = config.ethereum || [];
-      } else if (chain === "solana") {
-        newConfig.solana = config.solana || { conditions: [] };
-      } else if (chain === "tron") {
-        newConfig.tron = config.tron || [];
-      } else if (chain === "activity") {
-        newConfig.activity = config.activity || [];
-      }
-
-      onChange(newConfig);
+      onChange({ ...config, chain: "ethereum", ethereum: [] });
     }
   };
 
-  const handleEthereumChange = (conditions: EthereumCondition[]) => {
-    onChange({ ...config, ethereum: conditions });
+  const toggleActivity = () => {
+    if (activityEnabled) {
+      const { activity, ...rest } = config;
+      void activity;
+      onChange(rest);
+    } else {
+      onChange({ ...config, activity: [] });
+    }
   };
 
-  const handleSolanaChange = (solanaConfig: SolanaConditionConfig) => {
-    onChange({ ...config, solana: solanaConfig });
+  const toggleSigningResource = () => {
+    if (signingResourceEnabled) {
+      const { signingResource, ...rest } = config;
+      void signingResource;
+      onChange(rest);
+    } else {
+      onChange({ ...config, signingResource: [] });
+    }
   };
 
-  const handleTronChange = (conditions: TronCondition[]) => {
-    onChange({ ...config, tron: conditions });
+  const handleChainChange = (chain: string) => {
+    const newConfig: ConditionConfig = {
+      ...config,
+      chain: chain as ChainType,
+    };
+    // Initialize chain-specific array if not already set
+    if (chain === "ethereum" && !newConfig.ethereum) newConfig.ethereum = [];
+    if (chain === "solana" && !newConfig.solana)
+      newConfig.solana = { conditions: [] };
+    if (chain === "tron" && !newConfig.tron) newConfig.tron = [];
+    if (chain === "bitcoin" && !newConfig.bitcoin)
+      newConfig.bitcoin = { outputConditions: [] };
+    onChange(newConfig);
   };
 
-  const handleActivityChange = (conditions: ActivityCondition[]) => {
-    onChange({ ...config, activity: conditions });
+  const handleJoinChange = (value: string) => {
+    onChange({ ...config, conditionJoin: value as "&&" | "||" });
   };
 
   const handleRawChange = (rawCondition: string) => {
     onChange({ ...config, rawCondition });
   };
 
-  const isRawMode = !!config.rawCondition;
-  const currentChain = isRawMode ? "raw" : config.chain;
+  const clearRaw = () => {
+    const { rawCondition, ...rest } = config;
+    void rawCondition;
+    onChange(rest);
+  };
 
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Filter className="h-5 w-5" />
-          <Label className="text-lg font-semibold">Condition (When it applies)</Label>
+          <Label className="text-lg font-semibold">
+            Condition (When it applies)
+          </Label>
         </div>
         <a
           href="https://docs.turnkey.com/concepts/policies/overview#condition"
@@ -100,7 +179,8 @@ export function ConditionBuilder({ config, onChange }: ConditionBuilderProps) {
       </div>
 
       <p className="text-sm text-muted-foreground">
-        Define the conditions under which this policy applies.{" "}
+        Define when this policy applies. Enable one or more sections below and
+        combine them with AND/OR.{" "}
         <a
           href="https://docs.turnkey.com/concepts/policies/language"
           target="_blank"
@@ -111,73 +191,161 @@ export function ConditionBuilder({ config, onChange }: ConditionBuilderProps) {
         </a>
       </p>
 
-      <div>
-        <Label className="text-xs">Condition Type</Label>
-        <Select
-          options={chainOptions}
-          value={currentChain}
-          onChange={(e) => handleChainChange(e.target.value)}
-        />
+      {/* Join operator */}
+      {!isRawMode && (
+        <div>
+          <Label className="text-xs">Join conditions with</Label>
+          <Select
+            options={joinOptions}
+            value={join}
+            onChange={(e) => handleJoinChange(e.target.value)}
+          />
+        </div>
+      )}
+
+      {/* Raw mode toggle */}
+      <div className="flex items-center gap-2">
+        <Button
+          type="button"
+          variant={isRawMode ? "default" : "outline"}
+          size="sm"
+          onClick={() => (isRawMode ? clearRaw() : onChange({ ...config, rawCondition: "" }))}
+        >
+          Raw Expression
+        </Button>
+        <span className="text-xs text-muted-foreground">
+          Advanced: write the full condition manually
+        </span>
       </div>
 
-      <div className="mt-4">
-        {config.chain === "ethereum" && !isRawMode && (
-          <EthereumConditions
-            conditions={config.ethereum || []}
-            onChange={handleEthereumChange}
+      {isRawMode ? (
+        <div className="space-y-2">
+          <Label className="text-base font-semibold">Raw Condition Expression</Label>
+          <p className="text-sm text-muted-foreground">
+            Enter a raw policy condition expression. Use this for advanced
+            conditions not supported by the visual builder.
+          </p>
+          <Textarea
+            className="font-mono text-sm"
+            rows={4}
+            placeholder='activity.resource == "WALLET" && activity.action == "SIGN" && wallet.id == "<id>"'
+            value={config.rawCondition || ""}
+            onChange={(e) => handleRawChange(e.target.value)}
           />
-        )}
-
-        {config.chain === "solana" && !isRawMode && (
-          <SolanaConditions
-            config={config.solana || { conditions: [] }}
-            onChange={handleSolanaChange}
-          />
-        )}
-
-        {config.chain === "tron" && !isRawMode && (
-          <TronConditions
-            conditions={config.tron || []}
-            onChange={handleTronChange}
-          />
-        )}
-
-        {config.chain === "activity" && !isRawMode && (
-          <ActivityConditions
-            conditions={config.activity || []}
-            onChange={handleActivityChange}
-          />
-        )}
-
-        {isRawMode && (
-          <div className="space-y-2">
-            <Label className="text-base font-semibold">Raw Condition Expression</Label>
-            <p className="text-sm text-muted-foreground">
-              Enter a raw policy condition expression. Use this for advanced
-              conditions not supported by the visual builder.
-            </p>
-            <Textarea
-              className="font-mono text-sm"
-              rows={4}
-              placeholder="eth.tx.to == '0x...' && eth.tx.value <= 1000000000000000000"
-              value={config.rawCondition || ""}
-              onChange={(e) => handleRawChange(e.target.value)}
+          <p className="text-xs text-muted-foreground">
+            Refer to the{" "}
+            <a
+              href="https://docs.turnkey.com/concepts/policies/language"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-primary underline"
+            >
+              Turnkey Policy Language documentation
+            </a>{" "}
+            for syntax help.
+          </p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {/* Network/Chain Section */}
+          <div className="border rounded-lg p-4 space-y-3">
+            <SectionHeader
+              title="Network / Chain"
+              enabled={networkEnabled}
+              onToggle={toggleNetwork}
+              docUrl="https://docs.turnkey.com/concepts/policies/language#condition"
+              docLabel="Chain docs"
             />
-            <p className="text-xs text-muted-foreground">
-              Refer to the{" "}
-              <a
-                href="https://docs.turnkey.com/concepts/policies/language"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-primary underline"
-              >
-                Turnkey Policy Language documentation
-              </a>{" "}
-              for syntax help.
-            </p>
+            {networkEnabled && (
+              <div className="space-y-3 pt-1">
+                <div>
+                  <Label className="text-xs">Chain</Label>
+                  <Select
+                    options={chainOptions}
+                    value={config.chain || "ethereum"}
+                    onChange={(e) => handleChainChange(e.target.value)}
+                  />
+                </div>
+
+                {config.chain === "ethereum" && (
+                  <EthereumConditions
+                    conditions={config.ethereum || []}
+                    onChange={(c: EthereumCondition[]) =>
+                      onChange({ ...config, ethereum: c })
+                    }
+                  />
+                )}
+                {config.chain === "solana" && (
+                  <SolanaConditions
+                    config={config.solana || { conditions: [] }}
+                    onChange={(c: SolanaConditionConfig) =>
+                      onChange({ ...config, solana: c })
+                    }
+                  />
+                )}
+                {config.chain === "tron" && (
+                  <TronConditions
+                    conditions={config.tron || []}
+                    onChange={(c: TronCondition[]) =>
+                      onChange({ ...config, tron: c })
+                    }
+                  />
+                )}
+                {config.chain === "bitcoin" && (
+                  <BitcoinConditions
+                    config={config.bitcoin || { outputConditions: [] }}
+                    onChange={(c: BitcoinConditionConfig) =>
+                      onChange({ ...config, bitcoin: c })
+                    }
+                  />
+                )}
+              </div>
+            )}
           </div>
-        )}
-      </div>
+
+          {/* Activity Section */}
+          <div className="border rounded-lg p-4 space-y-3">
+            <SectionHeader
+              title="Activity"
+              enabled={activityEnabled}
+              onToggle={toggleActivity}
+              docUrl="https://docs.turnkey.com/api/activity-types"
+              docLabel="Activity types"
+            />
+            {activityEnabled && (
+              <div className="pt-1">
+                <ActivityConditions
+                  conditions={config.activity || []}
+                  onChange={(c: ActivityCondition[]) =>
+                    onChange({ ...config, activity: c })
+                  }
+                />
+              </div>
+            )}
+          </div>
+
+          {/* Signing Resource Section */}
+          <div className="border rounded-lg p-4 space-y-3">
+            <SectionHeader
+              title="Signing Resource"
+              enabled={signingResourceEnabled}
+              onToggle={toggleSigningResource}
+              docUrl="https://docs.turnkey.com/concepts/policies/language#condition"
+              docLabel="Resource docs"
+            />
+            {signingResourceEnabled && (
+              <div className="pt-1">
+                <SigningResourceConditions
+                  conditions={config.signingResource || []}
+                  onChange={(c: SigningResourceCondition[]) =>
+                    onChange({ ...config, signingResource: c })
+                  }
+                />
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }

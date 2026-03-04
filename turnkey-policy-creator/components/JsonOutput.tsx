@@ -106,7 +106,7 @@ export function JsonOutput({ policy }: JsonOutputProps) {
           <p className="text-xs text-muted-foreground">
             Use this JSON with the Turnkey API&apos;s{" "}
             <a
-              href="https://docs.turnkey.com/api/resources/policies#create-policies"
+              href="https://docs.turnkey.com/api-reference/activities/create-policy"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"
@@ -115,7 +115,7 @@ export function JsonOutput({ policy }: JsonOutputProps) {
             </a>{" "}
             or{" "}
             <a
-              href="https://docs.turnkey.com/api/resources/policies#create-policies"
+              href="https://docs.turnkey.com/api-reference/activities/create-policies"
               target="_blank"
               rel="noopener noreferrer"
               className="text-primary hover:underline"

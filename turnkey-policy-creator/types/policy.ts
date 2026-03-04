@@ -1,18 +1,40 @@
 export type PolicyEffect = "EFFECT_ALLOW" | "EFFECT_DENY";
 
-export type ChainType = "ethereum" | "solana" | "tron" | "activity";
+export type ChainType = "ethereum" | "solana" | "tron" | "bitcoin";
 
-export type ConsensusOperator = "any" | "all" | "count";
+export type ConsensusOperator =
+  | "any"
+  | "all"
+  | "count"
+  | "tag_any"
+  | "tag_count"
+  | "credential";
 
 export interface UserCondition {
   id: string;
   userId: string;
 }
 
+export interface TagCondition {
+  id: string;
+  tagId: string;
+}
+
+export interface CredentialCondition {
+  id: string;
+  field: "id" | "type" | "credential_id" | "public_key";
+  operator: "==" | "!=";
+  value: string;
+}
+
 export interface ConsensusConfig {
   operator: ConsensusOperator;
   users: UserCondition[];
   countThreshold?: number;
+  tags?: TagCondition[];
+  tagCountThreshold?: number;
+  credentials?: CredentialCondition[];
+  credentialQuantifier?: "any" | "all";
 }
 
 // Ethereum condition types
@@ -65,19 +87,48 @@ export interface TronCondition {
   value: string;
 }
 
+// Bitcoin condition types
+export interface BitcoinOutputCondition {
+  id: string;
+  quantifier: "all" | "any";
+  operator: "==" | "!=" | ">" | "<" | ">=" | "<=";
+  value: string;
+}
+
+export interface BitcoinConditionConfig {
+  outputConditions: BitcoinOutputCondition[];
+}
+
 // Activity condition types
 export interface ActivityCondition {
-  field: "type" | "resource";
+  field: "type" | "resource" | "action";
   operator: "==" | "!=";
   value: string;
 }
 
+// Signing resource condition types
+export type SigningResourceType = "wallet" | "wallet_account" | "private_key";
+
+export interface SigningResourceCondition {
+  id: string;
+  resourceType: SigningResourceType;
+  field: string;
+  operator: "==" | "!=" | ">" | "<" | ">=" | "<=";
+  value: string;
+}
+
 export interface ConditionConfig {
-  chain: ChainType;
+  conditionJoin?: "&&" | "||";
+  // Network/chain section (optional)
+  chain?: ChainType;
   ethereum?: EthereumCondition[];
   solana?: SolanaConditionConfig;
   tron?: TronCondition[];
+  bitcoin?: BitcoinConditionConfig;
+  // Activity section (optional, independent of chain)
   activity?: ActivityCondition[];
+  // Signing resource section (optional, independent of chain)
+  signingResource?: SigningResourceCondition[];
   rawCondition?: string;
 }
 
